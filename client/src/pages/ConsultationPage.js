@@ -29,11 +29,17 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Import our Baymax components
-import Baymax3D from '../components/Baymax/Baymax3D';
 import HeartRateMonitor from '../components/Medical/HeartRateMonitor';
 import EmotionDetector from '../components/Medical/EmotionDetector';
 import ReportSummarizer from '../components/Medical/ReportSummarizer';
 import VoiceChat from '../components/AI/VoiceChat';
+
+// Baymax components with error handling
+const Baymax3DWithFallback = React.lazy(() => {
+  return import('../components/Baymax/Baymax3D').catch(() => 
+    import('../components/Baymax/BaymaxFallback')
+  );
+});
 
 const ConsultationPage = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -41,6 +47,7 @@ const ConsultationPage = () => {
   const [currentEmotion, setCurrentEmotion] = useState('neutral');
   const [isBaymaxSpeaking, setIsBaymaxSpeaking] = useState(false);
   const [notifications, setNotifications] = useState([]);
+  const [baymax3DError, setBaymax3DError] = useState(false);
   const [sessionData, setSessionData] = useState({
     startTime: new Date(),
     heartRateReadings: [],
@@ -186,13 +193,28 @@ const ConsultationPage = () => {
       label: '3D Baymax',
       icon: <ViewInArRounded />,
       component: (
-        <Baymax3D
-          speaking={isBaymaxSpeaking}
-          emotion={currentEmotion}
-          heartRate={heartRate}
-          showHeartRate={heartRate > 0}
-          message={getBaymaxMessage()}
-        />
+        <React.Suspense fallback={
+          <Box 
+            sx={{ 
+              display: 'flex', 
+              justifyContent: 'center', 
+              alignItems: 'center', 
+              height: 500,
+              bgcolor: 'grey.100',
+              borderRadius: 2
+            }}
+          >
+            <Typography>Loading Baymax...</Typography>
+          </Box>
+        }>
+          <Baymax3DWithFallback
+            speaking={isBaymaxSpeaking}
+            emotion={currentEmotion}
+            heartRate={heartRate}
+            showHeartRate={heartRate > 0}
+            message={getBaymaxMessage()}
+          />
+        </React.Suspense>
       )
     },
     {

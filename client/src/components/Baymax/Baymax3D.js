@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame, useLoader } from '@react-three/fiber';
-import { OrbitControls, Text, Sphere, Box, Cylinder } from '@react-three/drei';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { OrbitControls, Text } from '@react-three/drei';
 import * as THREE from 'three';
 
 // Baymax Body Component
@@ -33,36 +33,40 @@ function BaymaxBody({ speaking, emotion, heartRate }) {
   return (
     <group>
       {/* Main Body */}
-      <Sphere
+      <mesh
         ref={meshRef}
-        args={[1.2, 32, 32]}
         position={[0, 0, 0]}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
+        <sphereGeometry args={[1.2, 32, 32]} />
         <meshPhongMaterial 
           color={hovered ? "#a5d8ff" : "#74c0fc"} 
           transparent 
           opacity={0.9}
           shininess={100}
         />
-      </Sphere>
+      </mesh>
       
       {/* Arms */}
-      <Cylinder args={[0.3, 0.3, 1.5]} position={[-1.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+      <mesh position={[-1.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.3, 0.3, 1.5]} />
         <meshPhongMaterial color="#74c0fc" transparent opacity={0.8} />
-      </Cylinder>
-      <Cylinder args={[0.3, 0.3, 1.5]} position={[1.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+      </mesh>
+      <mesh position={[1.5, 0, 0]} rotation={[0, 0, Math.PI / 2]}>
+        <cylinderGeometry args={[0.3, 0.3, 1.5]} />
         <meshPhongMaterial color="#74c0fc" transparent opacity={0.8} />
-      </Cylinder>
+      </mesh>
       
       {/* Legs */}
-      <Cylinder args={[0.4, 0.4, 1.8]} position={[-0.5, -1.8, 0]}>
+      <mesh position={[-0.5, -1.8, 0]}>
+        <cylinderGeometry args={[0.4, 0.4, 1.8]} />
         <meshPhongMaterial color="#74c0fc" transparent opacity={0.8} />
-      </Cylinder>
-      <Cylinder args={[0.4, 0.4, 1.8]} position={[0.5, -1.8, 0]}>
+      </mesh>
+      <mesh position={[0.5, -1.8, 0]}>
+        <cylinderGeometry args={[0.4, 0.4, 1.8]} />
         <meshPhongMaterial color="#74c0fc" transparent opacity={0.8} />
-      </Cylinder>
+      </mesh>
     </group>
   );
 }
@@ -105,17 +109,20 @@ function BaymaxHead({ speaking, emotion }) {
   return (
     <group ref={headRef} position={[0, 2, 0]}>
       {/* Head */}
-      <Sphere args={[0.8, 32, 32]} position={[0, 0, 0]}>
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[0.8, 32, 32]} />
         <meshPhongMaterial color="#74c0fc" transparent opacity={0.9} />
-      </Sphere>
+      </mesh>
       
       {/* Eyes */}
-      <Box ref={leftEyeRef} args={[0.15, 0.3, 0.1]} position={[-0.25, 0.1, 0.7]}>
+      <mesh ref={leftEyeRef} position={[-0.25, 0.1, 0.7]}>
+        <boxGeometry args={[0.15, 0.3, 0.1]} />
         <meshBasicMaterial color="#000" />
-      </Box>
-      <Box ref={rightEyeRef} args={[0.15, 0.3, 0.1]} position={[0.25, 0.1, 0.7]}>
+      </mesh>
+      <mesh ref={rightEyeRef} position={[0.25, 0.1, 0.7]}>
+        <boxGeometry args={[0.15, 0.3, 0.1]} />
         <meshBasicMaterial color="#000" />
-      </Box>
+      </mesh>
     </group>
   );
 }
@@ -140,21 +147,21 @@ function HeartRateVisualization({ heartRate, visible }) {
   return (
     <group ref={particlesRef} position={[0, 0, 0]}>
       {Array.from({ length: 20 }).map((_, i) => (
-        <Sphere
+        <mesh
           key={i}
-          args={[0.05, 8, 8]}
           position={[
             Math.cos((i / 20) * Math.PI * 2) * 2,
             Math.sin((i / 20) * Math.PI * 2) * 2,
             0
           ]}
         >
+          <sphereGeometry args={[0.05, 8, 8]} />
           <meshBasicMaterial 
             color={heartRate > 100 ? "#ff6b6b" : "#ff8787"} 
             transparent 
             opacity={0.7} 
           />
-        </Sphere>
+        </mesh>
       ))}
     </group>
   );
@@ -198,11 +205,7 @@ const Baymax3D = ({
     <div style={{ width: '100%', height: '500px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)' }}>
       <Canvas
         camera={{ position: [0, 2, 8], fov: 50 }}
-        onCreated={({ gl }) => {
-          gl.setSize(window.innerWidth, 500);
-          gl.shadowMap.enabled = true;
-          gl.shadowMap.type = THREE.PCFSoftShadowMap;
-        }}
+        gl={{ antialias: true }}
       >
         {/* Lighting */}
         <ambientLight intensity={0.6} />
@@ -210,8 +213,6 @@ const Baymax3D = ({
           position={[10, 10, 5]}
           intensity={0.8}
           castShadow
-          shadow-mapSize-width={1024}
-          shadow-mapSize-height={1024}
         />
         <pointLight position={[0, 5, 0]} intensity={0.5} color="#a5d8ff" />
 
