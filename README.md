@@ -1,68 +1,272 @@
-# <p align="center">A ChatGPT bot to respond to your GitHub Issues</p>
+# 🏥 VitalAI - Your Personal Medical Professional
 
-<p align="center">
-  <a href="https://discord.gg/ccZn9ZMfFf">
-    <img src="https://img.shields.io/badge/chat-Discord-7289DA?logo=discord" alt="flows.network Discord">
-  </a>
-  <a href="https://twitter.com/flows_network">
-    <img src="https://img.shields.io/badge/Twitter-1DA1F2?logo=twitter&amp;logoColor=white" alt="flows.network Twitter">
-  </a>
-   <a href="https://flows.network/flow/new">
-    <img src="https://img.shields.io/website?up_message=deploy&url=https%3A%2F%2Fflows.network%2Fflow%2Fnew" alt="Create a flow">
-  </a>
-</p>
+VitalAI is an advanced AI-powered medical consultation platform inspired by Baymax from Big Hero 6. It provides caring, professional medical guidance through an intuitive web interface with real-time AI conversations.
 
-[Deploy this function on flows.network](#deploy-chatgpt-github-app-on-your-github-repo), and you will get a GitHub bot that uses ChatGPT to respond to every comment in your GitHub issues automatically. It enables developers to use GitHub Issues as the conversational UI for ChatGPT!
+![VitalAI](https://img.shields.io/badge/VitalAI-Medical%20AI%20Platform-blue)
+![Node.js](https://img.shields.io/badge/Node.js-18+-green)
+![React](https://img.shields.io/badge/React-18+-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-Database-green)
 
-See a live demo [here](https://github.com/second-state/chat-with-chatgpt/) | Powered by `gpt4`, Rust and [WasmEdge](https://github.com/WasmEdge/WasmEdge).
+## ✨ Features
 
-IMPORTANT NOTICE: If you have deployed this function on flows.network before 7 AM 24/03/2023(UTC), please refer to [this issue](https://github.com/flows-network/chatgpt-github-app/issues/4) to fix your GitHub App.
+### 🤖 AI-Powered Medical Consultations
+- **Baymax-Inspired AI**: Caring, compassionate medical companion
+- **Real-time Chat**: Instant responses to medical queries
+- **Intelligent Analysis**: Symptom assessment and health guidance
+- **24/7 Availability**: Get medical support anytime, anywhere
 
-## Prerequisite 
+### 🏥 Health Management
+- **Medical History**: Track consultations and health trends
+- **Vital Signs Monitoring**: Record and monitor health metrics
+- **Symptom Tracking**: Detailed symptom logging and analysis
+- **Emergency Detection**: Smart urgency level assessment
 
-You will need an [OpenAI API key](https://openai.com/blog/openai-api). If you do not already have one, [sign up here](https://platform.openai.com/signup).
+### 🔒 Security & Privacy
+- **Data Encryption**: Bank-level security for health data
+- **HIPAA Compliance Ready**: Privacy-focused architecture
+- **Secure Authentication**: JWT-based user authentication
+- **Role-based Access**: Patient, doctor, and admin roles
 
-## Deploy ChatGPT GitHub App on your GitHub repo
+### 💻 Modern Interface
+- **Material-UI Design**: Beautiful, responsive interface
+- **Real-time Updates**: Socket.IO for live consultations
+- **Mobile Friendly**: Works perfectly on all devices
+- **Smooth Animations**: Framer Motion for engaging UX
 
-To install the ChatGPT GitHub App, we will use [flows.network](https://flows.network/), a serverless platform that makes deploying your own app quick and easy in just three steps.
+## 🚀 Quick Start
 
-### Fork this repo
+### Prerequisites
+- Node.js 18+ 
+- MongoDB 5+
+- Git
 
-Fork [this repo](https://github.com/flows-network/chatgpt-github-app/) and go to flows.network to deploy your function. 
+### Installation
 
-### Deploy the code on flow.network
+1. **Clone the Repository**
+```bash
+git clone <repository-url>
+cd vitalai-platform
+```
 
-1. Sign up for an account for deploying flows on [flows.network](https://flows.network/). It's free.
-2. Click on the "Create a Flow" button to start deploying the ChatGPT GitHub APP
-3. Authenticate the [flows.network](https://flows.network/) to access the `chatgpt-github-app` repo you just forked. 
-![image](https://user-images.githubusercontent.com/45785633/226546523-93071359-b957-4653-a429-ab983ee9a078.png)
+2. **Install Dependencies**
+```bash
+# Install backend dependencies
+npm install
 
-4. Click on the Advanced text and you will see more settings. we can fill in the required Environment Variables here. In this example, we have four variables. 
-* One is `login`: Fill in your personel github id here. The github app will act as you when respond to questions. 
-* The second one is `owner`: Fill in the GitHub org Name you want to connect here. 
-* The thrid one is `repo` : Fill in the GitHub repo Name under the GitHub org you just entered. 
-* The last one is `openai_key_name` : **Fill in the name you want to name your OpenAI Key**.
+# Install frontend dependencies
+cd client
+npm install
+cd ..
+```
 
-![image](https://user-images.githubusercontent.com/45785633/227463828-9ea913a5-f0a0-46bd-8d4c-da439ee72a94.png)
+3. **Environment Setup**
+```bash
+# Copy environment file
+cp .env.example .env
 
-5. At last, click the Deploy button to deploy your function.
+# Edit .env with your configuration
+nano .env
+```
 
-### Configure SaaS integrations
+4. **Start MongoDB**
+```bash
+# Using MongoDB service
+sudo systemctl start mongod
 
-After that, the flows.network will direct you to configure the SaaS integration required by your flow.
+# Or using Docker
+docker run -d -p 27017:27017 --name mongodb mongo:latest
+```
 
-![image](https://user-images.githubusercontent.com/45785633/226547995-54927771-7782-484a-8c9c-908e91f99444.png)
+5. **Run the Application**
+```bash
+# Development mode (backend + frontend)
+npm run dev
 
-Here we can see, we need to configue two SaaS integrations.
+# Or run separately:
+# Backend only
+npm start
 
-1. Click on the "Connect/+ Add new authentication" button to authenticate your OpenAI account. You'll be redirected to a new page where you could copy and paste your OpenAI API key and then name the key. **Note that the name you enter here should be the same as the name in the environment variables.**
+# Frontend only (in client directory)
+cd client && npm start
+```
 
-<img width="758" alt="image" src="https://user-images.githubusercontent.com/45785633/222973214-ecd052dc-72c2-4711-90ec-db1ec9d5f24e.png">
+6. **Access the Application**
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:5000
+- Health Check: http://localhost:5000/api/health
 
-2. Click the "Connect/+ Add new authentication" button to authenticate your GitHub account. You'll be redirected to a new page where you must grant [flows.network](https://flows.network/) permission to install the `flows-network-integration` bot on a repo. This repo is the one you entered into the environment variables above.
+## 🔧 Configuration
 
-After that, click the Check button to see your flow details. As soon as the flow function's status becomes `ready` and the flow's status became `running`, the ChatGPT GitHub App goes live. Go ahead and chat with ChatGPT by creating an issue!
+### Environment Variables
 
-![image](https://user-images.githubusercontent.com/45785633/226550405-67d0741c-6c78-42ef-87d1-b30bbd45a5a9.png)
+Create a `.env` file in the root directory:
 
-> [flows.network](https://flows.network/) is still in its early stages. We would love to hear your feedback!
+```env
+# Server Configuration
+NODE_ENV=development
+PORT=5000
+
+# Database
+MONGODB_URI=mongodb://localhost:27017/vitalai
+
+# Authentication
+JWT_SECRET=your-super-secret-jwt-key
+
+# OpenAI (Optional - for AI features)
+OPENAI_API_KEY=your-openai-api-key
+
+# Client URL
+CLIENT_URL=http://localhost:3000
+```
+
+### Optional Features
+
+#### OpenAI Integration
+To enable advanced AI features, add your OpenAI API key:
+1. Get an API key from [OpenAI](https://platform.openai.com/)
+2. Add it to your `.env` file as `OPENAI_API_KEY`
+3. Restart the server
+
+Without OpenAI, VitalAI will still work with fallback responses.
+
+## 📁 Project Structure
+
+```
+vitalai-platform/
+├── server/                 # Backend (Node.js/Express)
+│   ├── app.js             # Main server file
+│   ├── models/            # MongoDB models
+│   ├── routes/            # API routes
+│   ├── middleware/        # Authentication & validation
+│   └── ...
+├── client/                # Frontend (React)
+│   ├── src/
+│   │   ├── components/    # Reusable components
+│   │   ├── pages/         # Page components
+│   │   ├── contexts/      # React contexts
+│   │   └── ...
+│   ├── public/
+│   └── package.json
+├── package.json           # Backend dependencies
+├── .env.example          # Environment template
+└── README.md
+```
+
+## 🔌 API Endpoints
+
+### Authentication
+- `POST /api/auth/register` - User registration
+- `POST /api/auth/login` - User login
+- `GET /api/auth/me` - Get current user
+- `POST /api/auth/logout` - Logout
+
+### AI Consultations
+- `POST /api/ai/consultation/start` - Start new consultation
+- `POST /api/ai/consultation/:id/message` - Send message
+- `GET /api/ai/consultations` - Get user consultations
+- `PUT /api/ai/consultation/:id/end` - End consultation
+
+### User Management
+- `GET /api/users/profile` - Get user profile
+- `PUT /api/users/profile` - Update profile
+
+### Medical Data
+- `GET /api/medical/history` - Get medical history
+- `GET /api/medical/consultation/:id` - Get consultation details
+
+## 🎨 UI Components
+
+### Key Features
+- **Landing Page**: Beautiful introduction with features
+- **Authentication**: Login/Register with validation
+- **Dashboard**: Overview of health status and quick actions
+- **Consultation**: Real-time chat with VitalAI
+- **History**: Past consultations and health trends
+- **Profile**: User and medical information management
+
+### Design System
+- **Colors**: Blue primary (#2196f3), caring and professional
+- **Typography**: Inter font family for readability
+- **Layout**: Material-UI components with custom styling
+- **Animations**: Smooth transitions with Framer Motion
+
+## 🧠 AI Capabilities
+
+VitalAI is designed to be:
+
+1. **Caring & Compassionate**: Like Baymax, always warm and empathetic
+2. **Professional**: Evidence-based medical information
+3. **Safe**: Always encourages professional medical care when needed
+4. **Educational**: Explains medical concepts clearly
+5. **Responsive**: Quick, intelligent responses to health queries
+
+### Safety Features
+- Emergency keyword detection
+- Urgency level assessment
+- Professional referral recommendations
+- Clear limitations disclosure
+
+## 🔒 Security Features
+
+- **JWT Authentication**: Secure token-based authentication
+- **Password Hashing**: bcrypt with salt rounds
+- **Input Validation**: Express-validator for API endpoints
+- **CORS Protection**: Configured for secure cross-origin requests
+- **Helmet.js**: Security headers and protection
+- **Rate Limiting**: (Recommended for production)
+
+## 📱 Mobile Support
+
+VitalAI is fully responsive and works great on:
+- 📱 Mobile phones (iOS/Android)
+- 💻 Tablets
+- 🖥️ Desktop computers
+- 🌐 All modern browsers
+
+## 🚀 Production Deployment
+
+### Environment Setup
+1. Set `NODE_ENV=production`
+2. Use production MongoDB instance
+3. Set secure JWT secret
+4. Configure HTTPS
+5. Set up proper logging
+
+### Recommended Stack
+- **Frontend**: Vercel, Netlify, or AWS S3
+- **Backend**: Heroku, AWS EC2, or DigitalOcean
+- **Database**: MongoDB Atlas
+- **CDN**: CloudFlare for static assets
+
+## 🤝 Contributing
+
+We welcome contributions! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests if applicable
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 🆘 Support
+
+Need help? 
+
+- 📧 Email: support@vitalai.com
+- 🐛 Issues: GitHub Issues
+- 📖 Documentation: [Wiki](../../wiki)
+
+## ⚠️ Important Medical Disclaimer
+
+**VitalAI is for informational purposes only and is not a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read or received from VitalAI.**
+
+---
+
+**Made with ❤️ by the VitalAI Team**
+
+*Inspired by Baymax from Big Hero 6 - "I am VitalAI, your personal healthcare companion."*
+
