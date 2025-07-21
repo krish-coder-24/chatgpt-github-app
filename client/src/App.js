@@ -40,7 +40,7 @@ const PublicRoute = ({ children }) => {
 };
 
 function App() {
-  const { user, isLoading } = useAuth();
+  const { isLoading } = useAuth();
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -76,24 +76,42 @@ function App() {
             }
           />
 
-          {/* Protected Routes with Layout */}
+          {/* Protected Routes */}
           <Route
             path="/dashboard"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <Dashboard />
-                </AppLayout>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', width: '100%' }}
+                >
+                  <Sidebar />
+                  <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Navbar />
+                    <Dashboard />
+                  </Box>
+                </motion.div>
               </ProtectedRoute>
             }
           />
           <Route
-            path="/consultation/:id?"
+            path="/consultation"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <ConsultationPage />
-                </AppLayout>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', width: '100%' }}
+                >
+                  <Sidebar />
+                  <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Navbar />
+                    <ConsultationPage />
+                  </Box>
+                </motion.div>
               </ProtectedRoute>
             }
           />
@@ -101,9 +119,18 @@ function App() {
             path="/history"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <HistoryPage />
-                </AppLayout>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', width: '100%' }}
+                >
+                  <Sidebar />
+                  <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Navbar />
+                    <HistoryPage />
+                  </Box>
+                </motion.div>
               </ProtectedRoute>
             }
           />
@@ -111,63 +138,28 @@ function App() {
             path="/profile"
             element={
               <ProtectedRoute>
-                <AppLayout>
-                  <ProfilePage />
-                </AppLayout>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ display: 'flex', width: '100%' }}
+                >
+                  <Sidebar />
+                  <Box component="main" sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Navbar />
+                    <ProfilePage />
+                  </Box>
+                </motion.div>
               </ProtectedRoute>
             }
           />
 
-          {/* Catch all route */}
+          {/* Fallback Route */}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </AnimatePresence>
     </Box>
   );
 }
-
-// App Layout component for authenticated pages
-const AppLayout = ({ children }) => {
-  const [sidebarOpen, setSidebarOpen] = React.useState(false);
-
-  return (
-    <>
-      {/* Sidebar */}
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      
-      {/* Main Content */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          minHeight: '100vh',
-          bgcolor: 'background.default',
-        }}
-      >
-        {/* Top Navigation */}
-        <Navbar onMenuClick={() => setSidebarOpen(true)} />
-        
-        {/* Page Content */}
-        <Box
-          sx={{
-            flexGrow: 1,
-            p: { xs: 2, sm: 3 },
-            mt: { xs: 7, sm: 8 }, // Account for navbar height
-          }}
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {children}
-          </motion.div>
-        </Box>
-      </Box>
-    </>
-  );
-};
 
 export default App;

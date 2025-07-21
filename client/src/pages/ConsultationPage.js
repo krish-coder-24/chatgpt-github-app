@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Grid,
@@ -47,7 +47,6 @@ const ConsultationPage = () => {
   const [currentEmotion, setCurrentEmotion] = useState('neutral');
   const [isBaymaxSpeaking, setIsBaymaxSpeaking] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [baymax3DError, setBaymax3DError] = useState(false);
   const [sessionData, setSessionData] = useState({
     startTime: new Date(),
     heartRateReadings: [],

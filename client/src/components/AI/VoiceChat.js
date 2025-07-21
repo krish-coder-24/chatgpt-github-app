@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Box,
   Card,
@@ -29,7 +29,6 @@ import {
   StopRounded
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
 
 const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
   const [isListening, setIsListening] = useState(false);
@@ -46,40 +45,62 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
   const synthRef = useRef();
   const messagesEndRef = useRef();
 
-  // Initialize Baymax with greeting
-  useEffect(() => {
-    setSpeechSupported('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
-    
-    const welcomeMessage = {
-      id: Date.now(),
-      type: 'ai',
-      text: "Hello! I am Baymax, your personal healthcare companion. I am here to help you with any health concerns you may have. How can I assist you today?",
-      timestamp: new Date(),
-      emotion: 'happy'
-    };
-    
-    setMessages([welcomeMessage]);
-    
-    // Speak welcome message
-    if (voiceEnabled) {
-      speakText(welcomeMessage.text);
+  // Text-to-speech
+  const speakText = useCallback((text) => {
+    if (!voiceEnabled || !('speechSynthesis' in window)) return;
+
+    // Stop any current speech
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
     }
 
-    // Initialize speech recognition
-    if (speechSupported) {
-      initializeSpeechRecognition();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.9;
+    utterance.pitch = 1.1;
+    utterance.volume = 0.8;
+
+    // Try to use a more gentle voice
+    const voices = speechSynthesis.getVoices();
+    const preferredVoice = voices.find(voice => 
+      voice.name.includes('Google') || 
+      voice.name.includes('Microsoft') ||
+      voice.lang.includes('en')
+    );
+    
+    if (preferredVoice) {
+      utterance.voice = preferredVoice;
     }
 
-    return () => {
-      if (recognitionRef.current) {
-        recognitionRef.current.stop();
-      }
-      stopSpeaking();
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      if (onSpeakingChange) onSpeakingChange(true);
     };
-  }, []);
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      if (onSpeakingChange) onSpeakingChange(false);
+    };
+
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      if (onSpeakingChange) onSpeakingChange(false);
+    };
+
+    synthRef.current = utterance;
+    speechSynthesis.speak(utterance);
+  }, [voiceEnabled, onSpeakingChange]);
+
+  // Stop speaking
+  const stopSpeaking = useCallback(() => {
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+    if (onSpeakingChange) onSpeakingChange(false);
+  }, [onSpeakingChange]);
 
   // Initialize speech recognition
-  const initializeSpeechRecognition = () => {
+  const initializeSpeechRecognition = useCallback(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (SpeechRecognition) {
@@ -118,7 +139,39 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
         setIsListening(false);
       };
     }
-  };
+  }, []);
+
+  // Initialize Baymax with greeting
+  useEffect(() => {
+    setSpeechSupported('webkitSpeechRecognition' in window || 'SpeechRecognition' in window);
+    
+    const welcomeMessage = {
+      id: Date.now(),
+      type: 'ai',
+      text: "Hello! I am Baymax, your personal healthcare companion. I am here to help you with any health concerns you may have. How can I assist you today?",
+      timestamp: new Date(),
+      emotion: 'happy'
+    };
+    
+    setMessages([welcomeMessage]);
+    
+    // Speak welcome message
+    if (voiceEnabled) {
+      speakText(welcomeMessage.text);
+    }
+
+    // Initialize speech recognition
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      initializeSpeechRecognition();
+    }
+
+    return () => {
+      if (recognitionRef.current) {
+        recognitionRef.current.stop();
+      }
+      stopSpeaking();
+    };
+  }, [initializeSpeechRecognition, speakText, stopSpeaking, voiceEnabled]);
 
   // Start listening
   const startListening = () => {
@@ -281,58 +334,6 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
       text: defaultResponses[Math.floor(Math.random() * defaultResponses.length)],
       emotion: 'neutral'
     };
-  };
-
-  // Text-to-speech
-  const speakText = (text) => {
-    if (!voiceEnabled || !('speechSynthesis' in window)) return;
-
-    // Stop any current speech
-    stopSpeaking();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1.1;
-    utterance.volume = 0.8;
-
-    // Try to use a more gentle voice
-    const voices = speechSynthesis.getVoices();
-    const preferredVoice = voices.find(voice => 
-      voice.name.includes('Google') || 
-      voice.name.includes('Microsoft') ||
-      voice.lang.includes('en')
-    );
-    
-    if (preferredVoice) {
-      utterance.voice = preferredVoice;
-    }
-
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-      if (onSpeakingChange) onSpeakingChange(true);
-    };
-
-    utterance.onend = () => {
-      setIsSpeaking(false);
-      if (onSpeakingChange) onSpeakingChange(false);
-    };
-
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-      if (onSpeakingChange) onSpeakingChange(false);
-    };
-
-    synthRef.current = utterance;
-    speechSynthesis.speak(utterance);
-  };
-
-  // Stop speaking
-  const stopSpeaking = () => {
-    if ('speechSynthesis' in window) {
-      speechSynthesis.cancel();
-    }
-    setIsSpeaking(false);
-    if (onSpeakingChange) onSpeakingChange(false);
   };
 
   // Send text message

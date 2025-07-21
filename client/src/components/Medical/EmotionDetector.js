@@ -15,13 +15,9 @@ import {
 import {
   CameraAltRounded,
   StopRounded,
-  PsychologyRounded,
-  SentimentSatisfiedRounded,
-  SentimentDissatisfiedRounded,
-  SentimentNeutralRounded
+  PsychologyRounded
 } from '@mui/icons-material';
 import Webcam from 'react-webcam';
-import * as tf from '@tensorflow/tfjs';
 
 const EmotionDetector = ({ onEmotionChange, onStatusChange }) => {
   const [isActive, setIsActive] = useState(false);

@@ -5,7 +5,6 @@ import {
   CardContent,
   Typography,
   Button,
-  CircularProgress,
   Alert,
   LinearProgress,
   Chip,
@@ -16,7 +15,6 @@ import {
   FavoriteRounded,
   VideocamRounded,
   StopRounded,
-  TrendingUpRounded,
   MonitorHeartRounded
 } from '@mui/icons-material';
 import { Line } from 'react-chartjs-2';

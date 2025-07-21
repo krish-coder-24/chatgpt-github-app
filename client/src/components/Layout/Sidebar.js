@@ -1,22 +1,24 @@
 import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import {
+  Box,
   Drawer,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Box,
   Typography,
   Divider,
+  useTheme,
+  useMediaQuery
 } from '@mui/material';
 import {
-  Dashboard,
-  Chat,
-  History,
-  Person,
-  HealthAndSafety,
+  DashboardRounded,
+  PsychologyRounded,
+  HistoryRounded,
+  PersonRounded,
+  LogoutRounded,
+  SmartToyRounded
 } from '@mui/icons-material';
 
 const Sidebar = ({ open, onClose }) => {
