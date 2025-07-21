@@ -7,39 +7,26 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.16",
     "@mui/material": "^5.14.17",
-    "@react-three/drei": "^9.88.13",
-    "@react-three/fiber": "^8.15.11",
     "@tanstack/react-query": "^5.8.4",
-    "@tensorflow/tfjs": "^4.15.0",
     "axios": "^1.6.0",
-    "chart.js": "^4.4.0",
     "framer-motion": "^10.16.4",
-    "jspdf": "^2.5.1",
     "react": "^18.2.0",
-    "react-chartjs-2": "^5.2.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.1",
-    "react-markdown": "^9.0.1",
-    "react-query": "^3.39.3",
     "react-router-dom": "^6.17.0",
     "react-scripts": "5.0.1",
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
     "socket.io-client": "^4.7.2",
     "web-vitals": "^2.1.4",
     "three": "^0.160.0",
     "@react-three/fiber": "^8.15.19",
     "@react-three/drei": "^9.92.0",
     "@tensorflow/tfjs": "^4.15.0",
-=======
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
     "react-webcam": "^7.1.1",
-    "remark-gfm": "^4.0.0",
-    "socket.io-client": "^4.7.2",
-    "three": "^0.158.0",
-    "web-vitals": "^2.1.4"
+    "chart.js": "^4.4.0",
+    "react-chartjs-2": "^5.2.0",
+    "jspdf": "^2.5.1",
+    "react-markdown": "^9.0.1",
+    "remark-gfm": "^4.0.0"
   },
   "scripts": {
     "start": "react-scripts start",

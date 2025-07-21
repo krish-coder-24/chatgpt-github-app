@@ -7,9 +7,7 @@ import {
   Button,
   Grid,
   Card,
-  CardContent,
-  useTheme,
-  alpha
+  CardContent
 } from '@mui/material';
 import {
   HealthAndSafetyRounded,
@@ -23,7 +21,6 @@ import { motion } from 'framer-motion';
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const theme = useTheme();
 
   const features = [
     {

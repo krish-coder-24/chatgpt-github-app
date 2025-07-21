@@ -99,6 +99,65 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
     if (onSpeakingChange) onSpeakingChange(false);
   }, [onSpeakingChange]);
 
+  // Get AI response (simplified for demo)
+  const getAIResponse = useCallback(async (userInput) => {
+    // Simulate API call delay
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    // Generate contextual response based on user input and health data
+    const responses = generateBaymaxResponse(userInput, heartRate, emotion);
+    return responses;
+  }, [heartRate, emotion]);
+
+  // Handle user message
+  const handleUserMessage = useCallback(async (text) => {
+    if (!text.trim()) return;
+
+    const userMessage = {
+      id: Date.now(),
+      type: 'user',
+      text: text,
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMessage]);
+    setIsProcessing(true);
+
+    try {
+      // Get AI response
+      const aiResponse = await getAIResponse(text);
+      
+      const aiMessage = {
+        id: Date.now() + 1,
+        type: 'ai',
+        text: aiResponse.text,
+        timestamp: new Date(),
+        emotion: aiResponse.emotion || 'neutral',
+        heartRateComment: aiResponse.heartRateComment
+      };
+
+      setMessages(prev => [...prev, aiMessage]);
+
+      // Speak AI response if voice is enabled
+      if (voiceEnabled) {
+        speakText(aiResponse.text);
+      }
+
+    } catch (err) {
+      const errorMessage = {
+        id: Date.now() + 1,
+        type: 'ai',
+        text: "I'm sorry, I'm having trouble processing your request right now. Please try again.",
+        timestamp: new Date(),
+        emotion: 'concerned'
+      };
+      
+      setMessages(prev => [...prev, errorMessage]);
+    } finally {
+      setIsProcessing(false);
+    }
+  }, [voiceEnabled, speakText, getAIResponse]);
+
   // Initialize speech recognition
   const initializeSpeechRecognition = useCallback(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -139,7 +198,7 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
         setIsListening(false);
       };
     }
-  }, []);
+  }, [handleUserMessage]);
 
   // Initialize Baymax with greeting
   useEffect(() => {
@@ -197,65 +256,6 @@ const VoiceChat = ({ heartRate, emotion, onSpeakingChange }) => {
     setIsListening(false);
     setCurrentTranscript('');
     recognitionRef.current?.stop();
-  };
-
-  // Handle user message
-  const handleUserMessage = async (text) => {
-    if (!text.trim()) return;
-
-    const userMessage = {
-      id: Date.now(),
-      type: 'user',
-      text: text,
-      timestamp: new Date()
-    };
-
-    setMessages(prev => [...prev, userMessage]);
-    setIsProcessing(true);
-
-    try {
-      // Get AI response
-      const aiResponse = await getAIResponse(text);
-      
-      const aiMessage = {
-        id: Date.now() + 1,
-        type: 'ai',
-        text: aiResponse.text,
-        timestamp: new Date(),
-        emotion: aiResponse.emotion || 'neutral',
-        heartRateComment: aiResponse.heartRateComment
-      };
-
-      setMessages(prev => [...prev, aiMessage]);
-
-      // Speak AI response if voice is enabled
-      if (voiceEnabled) {
-        speakText(aiResponse.text);
-      }
-
-    } catch (err) {
-      const errorMessage = {
-        id: Date.now() + 1,
-        type: 'ai',
-        text: "I'm sorry, I'm having trouble processing your request right now. Please try again.",
-        timestamp: new Date(),
-        emotion: 'concerned'
-      };
-      
-      setMessages(prev => [...prev, errorMessage]);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
-
-  // Get AI response (simplified for demo)
-  const getAIResponse = async (userInput) => {
-    // Simulate API call delay
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    // Generate contextual response based on user input and health data
-    const responses = generateBaymaxResponse(userInput, heartRate, emotion);
-    return responses;
   };
 
   // Generate Baymax-style responses
