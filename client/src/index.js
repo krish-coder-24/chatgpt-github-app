@@ -6,6 +6,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Toaster } from 'react-hot-toast';
 import App from './App';
+import { AuthProvider } from './contexts/AuthContext';
 import './index.css';
 
 const queryClient = new QueryClient({
@@ -48,8 +49,10 @@ root.render(
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          <App />
-          <Toaster position="top-right" />
+          <AuthProvider>
+            <App />
+            <Toaster position="top-right" />
+          </AuthProvider>
         </ThemeProvider>
       </BrowserRouter>
     </QueryClientProvider>

@@ -15,7 +15,7 @@ yarn-error.log*
 .env.production.local
 
 # Production builds
-# client/build/  # Temporarily allowing build files for faster deployment
+client/build/
 dist/
 build/
 
@@ -139,7 +139,6 @@ coverage
 build/Release
 
 # Dependency directory
-# https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 node_modules
 
 # Debug log from npm
